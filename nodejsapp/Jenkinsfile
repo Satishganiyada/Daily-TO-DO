@@ -11,22 +11,28 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Installing dependencies...'
-                sh 'npm install'
+                dir('nodejsapp') {  // <-- change to your app folder
+                    echo 'Installing dependencies...'
+                    sh 'npm install'
+                }
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                sh 'npm test || echo "No tests found, skipping..."'
+                dir('nodejsapp') {
+                    echo 'Running tests...'
+                    sh 'npm test || echo "No tests found, skipping..."'
+                }
             }
         }
 
         stage('Docker Build') {
             steps {
-                echo 'Building Docker image...'
-                sh 'docker build -t my-node-app .'
+                dir('nodejsapp') {
+                    echo 'Building Docker image...'
+                    sh 'docker build -t my-node-app .'
+                }
             }
         }
 
@@ -48,5 +54,3 @@ pipeline {
         }
     }
 }
-
-
