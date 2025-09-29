@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Cloning repository...'
-                git branch: 'main', url: 'https://github.com/Satishganiyada/Daily-TO-DO/tree/main/nodejsapp'
+                git branch: 'main', url: 'https://github.com/Satishganiyada/Daily-TO-DO.git'
             }
         }
 
@@ -48,4 +48,5 @@ pipeline {
         }
     }
 }
+
 
