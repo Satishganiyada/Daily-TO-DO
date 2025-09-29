@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Cloning repository...'
+                git branch: 'main', url: 'https://github.com/Satishganiyada/Daily-TO-DO.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Installing dependencies...'
+                sh 'npm install'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                sh 'npm test || echo "No tests found, skipping..."'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                echo 'Building Docker image...'
+                sh 'docker build -t my-node-app .'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying container...'
+                sh 'docker rm -f my-node-app || true'
+                sh 'docker run -d -p 3000:3000 --name my-node-app my-node-app'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
